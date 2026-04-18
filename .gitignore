@@ -1,0 +1,5 @@
+.env
+__pycache__/
+*.pyc
+mock_calendar.json
+internships.json
