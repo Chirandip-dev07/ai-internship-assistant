@@ -116,6 +116,43 @@ Select an option
 
 ---
 
+## ☁️ Deployment (Google Cloud Run)
+
+The application has been containerized and adapted to run as a robust web API using FastAPI, making it perfectly suited for deployment on Google Cloud Run.
+
+### 1. Setting Environment Variables
+The application securely reads the Gemini API key from the environment. **Never hardcode your API key.**
+- **Local Development:** Create a `.env` file in the root directory and add: `GEMINI_API_KEY=your_api_key_here`
+- **Cloud Run:** The key is injected securely during deployment as an environment variable, seamlessly bypassing the need for a `.env` file.
+
+### 2. Steps to Deploy
+Assuming you have the [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) installed and authenticated, run the following command from the project root:
+
+```bash
+gcloud run deploy ai-internship-assistant \
+  --source . \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars="GEMINI_API_KEY=your_api_key_here"
+```
+*(Replace `us-central1` with your preferred region and insert your actual API key. For production, consider using Google Cloud Secret Manager.)*
+
+### 3. Example API Usage
+Once deployed, Cloud Run will provide a public URL. You can interact with the AI assistant via the `POST /ask` endpoint.
+
+**Request:**
+```bash
+curl -X POST "https://your-cloud-run-url.a.run.app/ask" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "query": "Help me draft a cold email",
+           "target_company_role": "Google SWE Intern",
+           "user_background": "CS student with Python experience"
+         }'
+```
+
+---
+
 ## 🔮 Future Improvements
 While the current architecture is robust, future scaling would include:
 1. **Real Google Calendar Integration:** Implementing `google-auth-oauthlib` and the `InstalledAppFlow` to securely write directly to the user's live Google Calendar.

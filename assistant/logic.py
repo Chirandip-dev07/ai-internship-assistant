@@ -15,6 +15,9 @@ def call_gemini_api(prompt: str, model_name: str = "gemini-2.5-flash") -> str:
     Sends a formatted prompt to the Gemini API and returns the text response.
     Raises specific exceptions on failure instead of returning strings.
     """
+    # Fetch the API key securely from the environment.
+    # We use os.environ to guarantee no hardcoded API keys exist in the source code.
+    # This design seamlessly supports local .env files as well as Cloud Run's injected environment variables.
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         raise ConfigurationError("GEMINI_API_KEY environment variable is missing. Please add it to your .env file.")
